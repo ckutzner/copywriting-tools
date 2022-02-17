@@ -19,7 +19,7 @@ def kw_count(infile, kw_file):
     # prepare text for processing
     doc = nlp(text)
 
-    # build patterns for matching
+    # build patterns for matching - todo: this should be its own function that returns a pattern for matching!
     kwpat = []
     for k in keys:
         kw = nlp(k)
