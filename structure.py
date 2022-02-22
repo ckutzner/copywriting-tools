@@ -17,17 +17,18 @@ def structural(infile):
     for l in lines:
         if lines.index(l) == 0:
             title = l.rstrip()
-        else if lines.index(l) == 1:
+        if lines.index(l) == 1:
             metadesc = l.rstrip()
-        else if re.match(r'^\#{1}\s\w', l):
+        if re.match(r'^\#{1}\s\w', l):
             h1 = l.strip('# \n')
-        else if re.match(r'^\#{2,3}\s\w', l):
+        if re.match(r'^\#{2,3}\s\w', l):
             headings.append(l.rstrip('# \n'))
-        else if lines.index(l) == 3:
+        if lines.index(l) == 3:
             teaser = l.rstrip()
         else:
             paragraphs.append(l)
 
     # close infile
     lines.close()
+    print(title, metadesc, h1, len(teaser), len(headings), len(paragraphs))
     return title, metadesc, h1, teaser, headings, paragraphs
