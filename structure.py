@@ -4,7 +4,7 @@ import re
 def structure(infile):
     """ function that dissects the text into its parts for wellformedness analysis
     :argument infile: the markdown file to be processed
-    :returns: a tuple: meta title as a string, meta desc as a string, header 1 as a string, headings 2-3 as a list of strings, paragraphs as a list of strings
+    :returns: a tuple: meta title as a string, meta desc as a string, teaser as a string, header 1 as a string, headings 2-3 as a list of strings, paragraphs as a list of strings
 
     """
     # set up lists
@@ -42,11 +42,24 @@ def requirements(infile):
     pass
 
 def wellformed(infile):
-    """TODO: takes output of structure and compares it to ranges in output of requirements
-    :returns: a tuple of yes/no (requirement fulfilled or not fulfilled)
+    """ function that takes output of structure and compares it to ranges in output of requirements
+    :returns: a list of yes/no values (requirement fulfilled or not fulfilled)
 
     """
-    pass
+    struc = structure(infile)
+    
+    #hardcoding values for now: minimum and maximum length
+    lengths = [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]
+    wellformed = []
+
+    for l in length:
+        for s in struc:
+            if len(s) >= l[0] and len(s) <= l[1]:
+                wellformed.append("yes")
+            else:
+                wellformed.append("no")
+
+    return wellformed
 
 if __name__ == "__main__":
     struc = structure("testdata/testtext.md")
@@ -57,4 +70,7 @@ if __name__ == "__main__":
     print("test for requirements not written yet")
 
 if __name__ == "__main__":
-    print("test for wellformed not written yet")
+    if wellformed("testdata/testtext2.md") == ["no", "no", "yes", "no", "yes"]:
+        print("test successful")
+    else: 
+        print("test failed")
