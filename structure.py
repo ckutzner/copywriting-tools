@@ -34,7 +34,27 @@ def structure(infile):
     # todo: transform this into a dictionary
     return title, metadesc, h1, teaser, headings, paragraphs
 
+def requirements(infile):
+    """ function that reads desired lengths from a text file
+    :returns: a tuple of lists with the desired lengths of title, meta, h1, teaser, headings
+
+    """
+    pass
+
+def wellformed(infile):
+    """TODO: takes output of structure and compares it to ranges in output of requirements
+    :returns: a tuple of yes/no (requirement fulfilled or not fulfilled)
+
+    """
+    pass
+
 if __name__ == "__main__":
     struc = structure("testdata/testtext.md")
     for s in struc:
         print(len(s))
+
+if __name__ == "__main__":    
+    print("test for requirements not written yet")
+
+if __name__ == "__main__":
+    print("test for wellformed not written yet")
