@@ -3,9 +3,12 @@
 import sys
 import textstat
 import stats
+import structure
 
 #read infile 
 infile = sys.argv[1]
+reqfile = sys.argv[2]
 
 stats.wordcount(infile)
 stats.readability(infile)
+structure.wellformed(infile, reqfile)

@@ -61,12 +61,15 @@ def wellformed(infile, reqfile):
     lengths = requirements(reqfile)
     
     well_formed = []
-    
+    labels = ["meta title", "meta description", "h1", "teaser", "number of h2s"]
+
     for i in range(0, 5):
         if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
             well_formed.append("yes")
         else:
             well_formed.append("no")
+    
+    print("requirements met: \n", labels, "\n", well_formed)
 
     return well_formed
 
