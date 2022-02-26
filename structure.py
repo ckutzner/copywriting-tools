@@ -58,18 +58,15 @@ def wellformed(infile, reqfile):
 
     """
     struc = structure(infile)
-    # lengths = requirements(reqfile)
+    lengths = requirements(reqfile)
     
-    #hardcoding values for now: minimum and maximum length
-    lengths = [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]
     well_formed = []
-
-    for l in lengths:
-        for s in struc:
-            if len(s) >= l[0] and len(s) <= l[1]:
-                well_formed.append("yes")
-            else:
-                well_formed.append("no")
+    
+    for i in range(0, 5):
+        if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
+            well_formed.append("yes")
+        else:
+            well_formed.append("no")
 
     return well_formed
 
@@ -78,12 +75,15 @@ if __name__ == "__main__":
     for s in struc:
         print(len(s))
 
-if __name__ == "__main__":    
-    print("test for requirements not written yet")
+if __name__ == "__main__":
+    if requirements("testdata/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
+        print("test for requirements successful! \n")
+    else:
+        print("test for requirements failed. \n")
 
 if __name__ == "__main__":
-    print(wellformed("testdata/testtext2.md"))
-    if wellformed("testdata/testtext2.md") == ["no", "no", "yes", "no", "yes"]:
+    print(wellformed("testdata/testtext2.md", "testdata/reqs.txt"))
+    if wellformed("testdata/testtext2.md", "testdata/reqs.txt") == ["no", "no", "yes", "no", "yes"]:
         print("test successful")
     else: 
         print("test failed")
