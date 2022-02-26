@@ -13,7 +13,8 @@ def structure(infile):
 
     # read text
     file = open(infile)
-    lines = file.readlines()
+    lines_raw = file.readlines()
+    lines = list(filter(lambda x: not re.match(r'^\s*$', x), lines_raw))
     
     for l in lines:
         if lines.index(l) == 0:
@@ -50,16 +51,16 @@ def wellformed(infile):
     
     #hardcoding values for now: minimum and maximum length
     lengths = [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]
-    wellformed = []
+    well_formed = []
 
     for l in lengths:
         for s in struc:
             if len(s) >= l[0] and len(s) <= l[1]:
-                wellformed.append("yes")
+                well_formed.append("yes")
             else:
-                wellformed.append("no")
+                well_formed.append("no")
 
-    return wellformed
+    return well_formed
 
 if __name__ == "__main__":
     struc = structure("testdata/testtext2.md")
@@ -70,6 +71,7 @@ if __name__ == "__main__":
     print("test for requirements not written yet")
 
 if __name__ == "__main__":
+    print(wellformed("testdata/testtext2.md"))
     if wellformed("testdata/testtext2.md") == ["no", "no", "yes", "no", "yes"]:
         print("test successful")
     else: 
