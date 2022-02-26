@@ -52,7 +52,7 @@ def wellformed(infile):
     lengths = [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]
     wellformed = []
 
-    for l in length:
+    for l in lengths:
         for s in struc:
             if len(s) >= l[0] and len(s) <= l[1]:
                 wellformed.append("yes")
@@ -62,7 +62,7 @@ def wellformed(infile):
     return wellformed
 
 if __name__ == "__main__":
-    struc = structure("testdata/testtext.md")
+    struc = structure("testdata/testtext2.md")
     for s in struc:
         print(len(s))
 
