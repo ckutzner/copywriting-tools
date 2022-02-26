@@ -36,18 +36,29 @@ def structure(infile):
     return title, metadesc, h1, teaser, headings, paragraphs
 
 def requirements(infile):
-    """ function that reads desired lengths from a text file
-    :returns: a tuple of lists with the desired lengths of title, meta, h1, teaser, headings
+    """ function that reads desired lengths from a text file that has min and max on one line each
+    :returns: a nested list with the desired lengths of title, meta, h1, teaser, headings
 
     """
-    pass
+    file = open(infile)
+    req = file.readlines()
 
-def wellformed(infile):
-    """ function that takes output of structure and compares it to ranges in output of requirements
+    # remove whitespace and turn each number into an integer, return a nested array
+    reqs = []
+    for r in req:
+        temp = r.strip().split(", ")
+        reqs.append([int(temp[0]), int(temp[1])])
+
+    file.close()
+    return reqs
+
+def wellformed(infile, reqfile):
+    """ function that takes output of structure and compares it to ranges in output of requirements, given a requirement file
     :returns: a list of yes/no values (requirement fulfilled or not fulfilled)
 
     """
     struc = structure(infile)
+    # lengths = requirements(reqfile)
     
     #hardcoding values for now: minimum and maximum length
     lengths = [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]
