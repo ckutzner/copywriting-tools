@@ -3,9 +3,9 @@ import spacy
 from spacy.matcher import Matcher
 
 def listcheck(infile, listfile):
-    """ reads listfile, looks for matches of the lemma in infile, optional:counts matches
+    """ reads listfile, looks for matches of the lemma in infile
     arguments: infile - an text or markdown file, listfile - a textfile with one word to check per line
-    :returns: each word from the list that was found + count as a list of tuples or list of lists
+    :returns: each word from the list that was found
 
     """
     # prepare spacy
@@ -48,6 +48,3 @@ if __name__ == "__main__":
     else:
         for line in listcheck("testdata/testtext2.md", "testdata/forbidden.txt"):
             print("Forbidden word {} found!".format(line))
-
-#    for l in listcheck("testdata/testtext2.md", "testdata/forbidden.txt"):
-#        print("Forbidden word {} found {} times".format(l[0], l[1]));
