@@ -69,7 +69,7 @@ def wellformed(infile, reqfile):
         else:
             well_formed.append("no")
     
-    print("requirements met: \n", labels, "\n", well_formed)
+    #print("requirements met: \n", labels, "\n", well_formed)
 
     return well_formed
 
