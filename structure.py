@@ -54,7 +54,7 @@ def requirements(infile):
 
 def wellformed(infile, reqfile):
     """ function that takes output of structure and compares it to ranges in output of requirements, given a requirement file
-    :returns: a list of yes/no values (requirement fulfilled or not fulfilled)
+    :returns: a list of yes/too short/too long strings (requirement fulfilled or not fulfilled)
 
     """
     struc = structure(infile)
@@ -66,8 +66,10 @@ def wellformed(infile, reqfile):
     for i in range(0, 5):
         if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
             well_formed.append("yes")
+        if len(struc[i] < lengths[i][0]:
+            well_formed.append("too short")
         else:
-            well_formed.append("no")
+            well_formed.append("too long")
     
     #print("requirements met: \n", labels, "\n", well_formed)
 
