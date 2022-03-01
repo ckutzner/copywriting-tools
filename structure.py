@@ -66,7 +66,7 @@ def wellformed(infile, reqfile):
     for i in range(0, 5):
         if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
             well_formed.append("yes")
-        if len(struc[i] < lengths[i][0]:
+        if len(struc[i]) < lengths[i][0]:
             well_formed.append("too short")
         else:
             well_formed.append("too long")
