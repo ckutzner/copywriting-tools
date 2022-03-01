@@ -71,9 +71,8 @@ def wellformed(infile, reqfile):
         else:
             well_formed.append("too long")
     
-    #print("requirements met: \n", labels, "\n", well_formed)
-
-    return well_formed
+    wf = dict(zip(labels, well_formed))
+    return wf
 
 if __name__ == "__main__":
     struc = structure("testdata/testtext2.md")
@@ -88,7 +87,7 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     print(wellformed("testdata/testtext2.md", "testdata/reqs.txt"))
-    if wellformed("testdata/testtext2.md", "testdata/reqs.txt") == ["no", "no", "yes", "no", "yes"]:
+    if wellformed("testdata/testtext2.md", "testdata/reqs.txt")["h1"] == "yes":
         print("test successful")
     else: 
         print("test failed")
