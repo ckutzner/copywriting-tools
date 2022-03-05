@@ -80,14 +80,14 @@ if __name__ == "__main__":
         print(len(s))
 
 if __name__ == "__main__":
-    if requirements("testdata/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
+    if requirements("testdata/req/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
         print("test for requirements successful! \n")
     else:
         print("test for requirements failed. \n")
 
 if __name__ == "__main__":
-    print(wellformed("testdata/testtext2.md", "testdata/reqs.txt"))
-    if wellformed("testdata/testtext2.md", "testdata/reqs.txt")["h1"] == "yes":
+    print(wellformed("testdata/testtext2.md", "testdata/req/reqs.txt"))
+    if wellformed("testdata/testtext2.md", "testdata/req/reqs.txt")["h1"] == "yes":
         print("test successful")
     else: 
         print("test failed")

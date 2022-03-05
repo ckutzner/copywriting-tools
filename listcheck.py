@@ -43,7 +43,7 @@ def listcheck(infile, listfile):
     return found_words
 
 if __name__ == "__main__":
-    if listcheck("testdata/testtext2.md", "testdata/forbidden.txt") == []:
+    if listcheck("testdata/testtext2.md", "testdata/req/forbidden.txt") == []:
         print("function did nothing!")
     else:
         for line in listcheck("testdata/testtext2.md", "testdata/forbidden.txt"):
