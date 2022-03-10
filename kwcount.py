@@ -9,15 +9,14 @@ def prepare_text_obj(infile):
     :returns: a text object prepared for matching via SpaCy
 
     """
-    txt = open(infile)
-    text = txt.read()
+    with open(infile) as txt:
+        text = txt.read()
     
     # set up nlp - or am I supposed to put this in a different function?
     nlp = spacy.load("de_core_news_sm")
     # prepare text for processing
     doc = nlp(text)
 
-    text.close()
     return doc
 
 def prepare_patterns(kw_file):
@@ -31,8 +30,8 @@ def prepare_patterns(kw_file):
     matcher = Matcher(nlp.vocab)
 
     # initialize SpaCy matcher
-    file = open(kw_file)
-    keys = file.read().split("\n"); 
+    with open(kw_file) as file:
+        keys = file.read().split("\n")
 
     # build patterns for matching - todo: this should be its own function that returns a pattern for matching!
     kwpat = []
@@ -40,7 +39,6 @@ def prepare_patterns(kw_file):
         kw = nlp(k)
         kwpat.append([w.lemma_ for w in kw])
 
-    file.close()
     return kwpat
  
 def kw_match(textobj, matcher):
