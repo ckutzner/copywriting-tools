@@ -31,12 +31,12 @@ def prepare_patterns(kw_file):
 
     # initialize SpaCy matcher
     with open(kw_file) as file:
-        keys = file.read().split("\n")
+        keys = file.readlines()
 
     # build patterns for matching - todo: this should be its own function that returns a pattern for matching!
     kwpat = []
     for k in keys:
-        kw = nlp(k)
+        kw = nlp(k.strip())
         kwpat.append([w.lemma_ for w in kw])
 
     return kwpat
@@ -54,3 +54,7 @@ def kw_match(textobj, matcher):
 
     print("Keywords found: {}".format(keys_found))
     return keys_found
+
+if __name__ == "__main__":
+    print(prepare_text_obj("testdata/testtext2.md")[0:5])
+    print(prepare_patterns("testdata/kw.txt"))
