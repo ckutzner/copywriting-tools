@@ -11,7 +11,7 @@ def structure(infile):
     headings = []
 
     # read text
-    with open(infile) as file:
+    with open(infile, encoding = "utf-8") as file:
         lines_raw = file.readlines()
 
     lines = [line for line in lines_raw if not re.match(r'^\s*$', line)]
@@ -41,7 +41,7 @@ def requirements(infile):
     :returns: a nested list with the desired lengths of title, meta, h1, teaser, headings
 
     """
-    with open(infile) as file:
+    with open(infile, encoding = "utf-8") as file:
         req = file.readlines()
 
     # remove whitespace and turn each number into an integer, return a nested array

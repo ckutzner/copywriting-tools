@@ -9,7 +9,7 @@ def prepare_text_obj(infile):
     :returns: a text object prepared for matching via SpaCy
 
     """
-    with open(infile) as txt:
+    with open(infile, encoding = "utf-8") as txt:
         text = txt.read()
     
     # set up nlp - or am I supposed to put this in a different function?
@@ -30,7 +30,7 @@ def prepare_patterns(kw_file):
     matcher = Matcher(nlp.vocab)
 
     # initialize SpaCy matcher
-    with open(kw_file) as file:
+    with open(kw_file, encoding = "utf-8") as file:
         keys = file.readlines()
 
     # build patterns for matching - todo: this should be its own function that returns a pattern for matching!
