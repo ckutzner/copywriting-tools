@@ -34,7 +34,6 @@ def structure(infile):
             if lines.index(l) > 3 and re.match(r'^\w', l):
                 pass
 
-    # todo: transform this into a dictionary
     return title, metadesc, h1, teaser, headings, first_par
 
 def requirements(infile):
@@ -65,7 +64,7 @@ def wellformed(infile, reqfile):
     labels = ["meta title", "meta description", "h1", "teaser", "number of h2s"]
 
     for i in range(0, len(labels)-1):
-        count = textstat.char_count(struc[i], ignore_spaces = "true") 
+        count = textstat.char_count(struc[i], ignore_spaces = "false") 
         if count < lengths[i][0]:
             well_formed.append("too short")
         if count > lengths[i][1]:
