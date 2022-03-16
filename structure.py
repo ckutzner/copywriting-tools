@@ -1,5 +1,6 @@
 """ module for wellformedness analysis """
 import re
+import textstat
 
 def structure(infile):
     """ function that dissects the text into its parts for wellformedness analysis
@@ -63,14 +64,22 @@ def wellformed(infile, reqfile):
     well_formed = []
     labels = ["meta title", "meta description", "h1", "teaser", "number of h2s"]
 
-    for i in range(0, 5):
-        if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
-            well_formed.append("yes")
-        if len(struc[i]) < lengths[i][0]:
+    for i in range(0, len(labels)-1):
+        count = textstat.char_count(struc[i], ignore_spaces = "true") 
+        if count < lengths[i][0]:
             well_formed.append("too short")
-        else:
+        if count > lengths[i][1]:
             well_formed.append("too long")
+        else:
+            well_formed.append("yes")
     
+    if len(struc[4]) < lengths[-1][0]:
+        well_formed.append("too few")
+    if len(struc[4]) > lengths[-1][1]:
+        well_formed.append("too many")
+    else:
+        well_formed.append("ok")
+
     wf = dict(zip(labels, well_formed))
     return wf
 
@@ -87,8 +96,8 @@ if __name__ == "__main__":
         print("test for requirements failed. \n")
 
 if __name__ == "__main__":
-    print(wellformed("testdata/testtext2.md", "testdata/reqs.txt"))
-    if wellformed("testdata/testtext2.md", "testdata/reqs.txt") == ["no", "no", "yes", "no", "yes"]:
+    print(wellformed("testdata/testtext2.md", "testdata/req/reqs.txt"))
+    if wellformed("testdata/testtext2.md", "testdata/req/reqs.txt") == {'meta title': 'too short', 'meta description': 'yes', 'h1': 'too short', 'teaser': 'yes', 'number of h2s': 'yes'}:
         print("wellformedness test successful")
     else: 
         print("wellformedness test failed")
