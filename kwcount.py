@@ -2,6 +2,9 @@
 import spacy
 from spacy.matcher import Matcher
 
+nlp = spacy.load("de_core_news_sm") # load SpaCy pipeline
+matcher = Matcher(nlp.vocab)        # prepare Matcher
+
 def prepare_text_obj(infile):
     """ prepares a text for processing
 
@@ -12,11 +15,8 @@ def prepare_text_obj(infile):
     with open(infile, encoding = "utf-8") as txt:
         text = txt.read()
     
-    # set up nlp - or am I supposed to put this in a different function?
-    nlp = spacy.load("de_core_news_sm")
     # prepare text for processing
     doc = nlp(text)
-
     return doc
 
 def prepare_patterns(kw_file):
@@ -26,10 +26,6 @@ def prepare_patterns(kw_file):
     :returns: a matcher object
 
     """
-    nlp = spacy.load("de_core_news_sm")
-    matcher = Matcher(nlp.vocab)
-
-    # initialize SpaCy matcher
     with open(kw_file, encoding = "utf-8") as file:
         keys = file.readlines()
 
