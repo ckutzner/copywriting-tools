@@ -1,47 +1,48 @@
 """ module for wellformedness analysis """
 import re
+import textstat
 
 def structure(infile):
     """ function that dissects the text into its parts for wellformedness analysis
     :argument infile: the markdown file to be processed
-    :returns: a tuple: meta title as a string, meta desc as a string, teaser as a string, header 1 as a string, headings 2-3 as a list of strings, paragraphs as a list of strings
+    :returns: a tuple: meta title as a string, meta desc as a string, teaser as a string, header 1 as a string, headings 2-3 as a list of strings, first paragraph as a string 
 
     """
-    # set up lists
+    # set up list of headings
     headings = []
-    paragraphs = []
 
     # read text
-    file = open(infile)
-    lines_raw = file.readlines()
-    lines = list(filter(lambda x: not re.match(r'^\s*$', x), lines_raw))
+    with open(infile, encoding = "utf-8") as file:
+        lines_raw = file.readlines()
+
+    lines = [line for line in lines_raw if not re.match(r'^\s*$', line)]
     
     for l in lines:
         if lines.index(l) == 0:
-            title = l.rstrip()
+            title = l.strip()
         if lines.index(l) == 1:
-            metadesc = l.rstrip()
+            metadesc = l.strip()
         if re.match(r'^\#{1}\s\w', l):
             h1 = l.strip('# \n')
         if re.match(r'^\#{2,3}\s\w', l):
             headings.append(l.strip('# \n'))
         if lines.index(l) == 3:
-            teaser = l.rstrip()
+            teaser = l.strip()
+        if lines.index(l) == 5:
+            first_par = l.strip()
         else:
             if lines.index(l) > 3 and re.match(r'^\w', l):
-                paragraphs.append(l)
+                pass
 
-    file.close()
-    # todo: transform this into a dictionary
-    return title, metadesc, h1, teaser, headings, paragraphs
+    return title, metadesc, h1, teaser, headings, first_par
 
 def requirements(infile):
     """ function that reads desired lengths from a text file that has min and max on one line each
     :returns: a nested list with the desired lengths of title, meta, h1, teaser, headings
 
     """
-    file = open(infile)
-    req = file.readlines()
+    with open(infile, encoding = "utf-8") as file:
+        req = file.readlines()
 
     # remove whitespace and turn each number into an integer, return a nested array
     reqs = []
@@ -49,7 +50,6 @@ def requirements(infile):
         temp = r.strip().split(", ")
         reqs.append([int(temp[0]), int(temp[1])])
 
-    file.close()
     return reqs
 
 def wellformed(infile, reqfile):
@@ -63,14 +63,22 @@ def wellformed(infile, reqfile):
     well_formed = []
     labels = ["meta title", "meta description", "h1", "teaser", "number of h2s"]
 
-    for i in range(0, 5):
-        if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
-            well_formed.append("yes")
-        if len(struc[i]) < lengths[i][0]:
+    for i in range(0, len(labels)-1):
+        count = textstat.char_count(struc[i], ignore_spaces = "false") 
+        if count < lengths[i][0]:
             well_formed.append("too short")
-        else:
+        if count > lengths[i][1]:
             well_formed.append("too long")
+        else:
+            well_formed.append("yes")
     
+    if len(struc[4]) < lengths[-1][0]:
+        well_formed.append("too few")
+    if len(struc[4]) > lengths[-1][1]:
+        well_formed.append("too many")
+    else:
+        well_formed.append("ok")
+
     wf = dict(zip(labels, well_formed))
     return wf
 
@@ -78,6 +86,7 @@ if __name__ == "__main__":
     struc = structure("testdata/testtext2.md")
     for s in struc:
         print(len(s))
+    print(struc[-1])
 
 if __name__ == "__main__":
     if requirements("testdata/req/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
@@ -87,7 +96,7 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     print(wellformed("testdata/testtext2.md", "testdata/req/reqs.txt"))
-    if wellformed("testdata/testtext2.md", "testdata/req/reqs.txt")["h1"] == "yes":
-        print("test successful")
+    if wellformed("testdata/testtext2.md", "testdata/req/reqs.txt") == {'meta title': 'too short', 'meta description': 'yes', 'h1': 'too short', 'teaser': 'yes', 'number of h2s': 'yes'}:
+        print("wellformedness test successful")
     else: 
-        print("test failed")
+        print("wellformedness test failed")
