@@ -13,6 +13,10 @@ def wordcount(infile):
 
     wc = textstat.lexicon_count(text)
     
+<<<<<<< HEAD
+    file.close()
+=======
+>>>>>>> feature/stats
     return wc
 
 def readability(infile):
@@ -28,4 +32,8 @@ def readability(infile):
     flesch = textstat.flesch_reading_ease(text)
     stf = textstat.wiener_sachtextformel(text, 1)
 
+<<<<<<< HEAD
+    file.close()
+=======
+>>>>>>> feature/stats
     return flesch, stf
