@@ -37,14 +37,17 @@ def prepare_patterns(kw_file):
 
     return kwpat
  
-def kw_match(textobj, matcher):
+def kw_match(textobj, match):
     """ returns matches of a keyword in a given text object
     :textobj: a nlp object of the text to be matched
-    :matcher: a prepared SpaCy matcher
+    :match: a prepared SpaCy matcher
     :returns: a dictionary: keywords, matched or not? 
     """
     # build a dictionary for the keywords - can I extract those from the matcher object?
     keys_found = {}
+
+    matches = match(textobj)
+
 
     # collect match count
 
