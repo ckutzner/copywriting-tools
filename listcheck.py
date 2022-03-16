@@ -57,7 +57,7 @@ def listcheck(infile, listfile):
         if m not in found_words:
             found_words.append(m)
 
-    # close files, return matches and count
+    # return matches
     return found_words
 
 if __name__ == "__main__":
