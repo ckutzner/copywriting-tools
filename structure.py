@@ -54,7 +54,7 @@ def requirements(infile):
 
 def wellformed(infile, reqfile):
     """ function that takes output of structure and compares it to ranges in output of requirements, given a requirement file
-    :returns: a list of yes/no values (requirement fulfilled or not fulfilled)
+    :returns: a list of yes/too short/too long strings (requirement fulfilled or not fulfilled)
 
     """
     struc = structure(infile)
@@ -66,12 +66,13 @@ def wellformed(infile, reqfile):
     for i in range(0, 5):
         if lengths[i][0] <= len(struc[i]) <= lengths[i][1]:
             well_formed.append("yes")
+        if len(struc[i]) < lengths[i][0]:
+            well_formed.append("too short")
         else:
-            well_formed.append("no")
+            well_formed.append("too long")
     
-    print("requirements met: \n", labels, "\n", well_formed)
-
-    return well_formed
+    wf = dict(zip(labels, well_formed))
+    return wf
 
 if __name__ == "__main__":
     struc = structure("testdata/testtext2.md")
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     print(struc[-1])
 
 if __name__ == "__main__":
-    if requirements("testdata/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
+    if requirements("testdata/req/reqs.txt") == [[45, 55], [130, 160], [0, 80], [330, 350],[3,5]]:
         print("test for requirements successful! \n")
     else:
         print("test for requirements failed. \n")
