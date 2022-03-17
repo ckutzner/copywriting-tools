@@ -1,6 +1,7 @@
 """ module for building matcher patterns"""
 import spacy
 from spacy.matcher import Matcher
+from structure import structure
 
 nlp = spacy.load("de_core_news_sm") # load SpaCy pipeline
 
@@ -47,9 +48,8 @@ class KW_Matcher:
                     
         return subkeys
 
-    def match(self):
-        """ prepares patterns for keyword matching, prepares document,
-        matches and returns keyword 
+    def match_doc(self):
+        """ prepares patterns for keyword matching
 
         :returns: dictionary with keywords as keys, their count and
         found matches as values
@@ -97,14 +97,73 @@ class KW_Matcher:
 
         return found_words
 
+    def primary_matches(self):
+        """checks for occurrence of primary keyword in the items returned by structure
+
+        :returns: a dictionary of item names, each with yes/no values 
+
+        """
+        # initialize matcher
+        matcher = Matcher(nlp.vocab)
+
+        # initialize dictionary for positions where kw was detected
+        labels = ["meta title", "meta description", "h1", "teaser", "h2", "first paragraph"]
+        found_pos = dict.fromkeys(labels, "no")
+
+        # prepare the items to perform matching on
+        items = list(structure(self.docfile))
+        items[3] = str(items[3].split(". ")[0])      #isolate first sentence of teaser 
+            
+        for i in items:
+            if isinstance(i, list):
+                i = ", ".join(i)     # join together list items
+            i = i.strip("#\n ")
+
+        # put them in a dictionary with their labels
+        lines_dic = dict(zip(labels, items))
+            
+        # isolate primary keyword
+        primary_kw = self.keys[0].strip()
+        
+        # prepare the matcher
+        if len(primary_kw.split(" ")) > 1:
+            pattern = []
+            words = nlp(primary_kw)
+            for token in words[:-1]:
+                pattern.extend([{"LEMMA": token.lemma_}, {"is_stop": True, "op": "?"}])
+            pattern.extend([{"LEMMA": words[-1].lemma_}])
+            matcher.add(primary_kw, [pattern])
+        else:
+            pattern = [{"LEMMA": str(primary_kw.strip())}]
+            matcher.add(primary_kw, [pattern])
+
+        # prepare the items for matching
+        for line in lines_dic:
+            doc = nlp(str(lines_dic[line]))
+            if len(matcher(doc)) == 0:
+                found_pos[line] = "no"
+            else: 
+                found_pos[line] = "keyword found"
+
+        return found_pos
+
 
 if __name__ == "__main__":
     kwmatch = KW_Matcher("testdata/testtext2.md", "testdata/req/moneykw.txt")
-    if kwmatch.match() == {'offensiv': [4, 'offensiv'], 'Flasche':
+    if kwmatch.match_doc() == {'offensiv': [4, 'offensiv'], 'Flasche':
         [4, 'Flasche'], 'drei': [4, 'drei']}:
-        print("matcher test successful")
+        print("matcher test successful\n")
     else:
-        print("matcher test failed")
+        print("matcher test failed\n")
 
     submatch = KW_Matcher("testdata/testtext.md", "testdata/kw.txt")
-    print(submatch.subkeys())
+    if submatch.subkeys() == {'Heiterkeit': ['wunderbare Heiterkeit']}:
+        print("submatch test successful\n")
+    else:
+        print("submatch test failed\n")
+    
+    prim_match = KW_Matcher("testdata/testtext.md", "testdata/kw.txt")
+    if prim_match.primary_matches() == {'meta title': 'keyword found', 'meta description': 'no', 'h1': 'keyword found', 'teaser': 'keyword found', 'h2': 'keyword found', 'first paragraph': 'keyword found'}:
+        print("primary matching test successful\n")
+    else:
+        print("primary matching test failed\n")
