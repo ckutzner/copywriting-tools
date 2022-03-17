@@ -70,6 +70,7 @@ class KW_Matcher:
             if token.text != "\n":
                 pattern = [{"LEMMA": token.lemma_}]
                 matcher.add(token.text, [pattern])
+                found_words[token.text] = [0]
 
         # matcher for multi-word keywords
         for term in self.multi_word:
@@ -81,6 +82,7 @@ class KW_Matcher:
             pattern.extend([{"LEMMA": wrds[-1].lemma_}])
 
             matcher.add(term, [pattern])
+            found_words[term] = [0]
 
         #match infile
         matches = matcher(doc)
@@ -88,12 +90,9 @@ class KW_Matcher:
         for match_id, start, end in matches:
             string_id = nlp.vocab.strings[match_id]
             m = doc[start:end].text
-            if string_id not in found_words:
-                found_words[string_id] = [1, m]
-            else:
-                found_words[string_id][0] += 1
-                if m not in found_words[string_id][1:]:
-                    found_words.append(m)
+            found_words[string_id][0] += 1
+            if m not in found_words[string_id][1:]:
+                found_words[string_id].append(m)
 
         return found_words
 
