@@ -8,7 +8,7 @@ def wordcount(infile):
     :returns: wordcount as an integer
     """
     
-    with open(infile) as file:
+    with open(infile, encoding = "utf-8") as file:
         text = file.read()
 
     wc = textstat.lexicon_count(text)
@@ -22,7 +22,7 @@ def readability(infile):
     :returns: Flesch index and Wiener sachtextformel index as floats
     """
     
-    with open(infile) as file:
+    with open(infile, encoding = "utf-8") as file:
         text = file.read()
     
     flesch = textstat.flesch_reading_ease(text)
