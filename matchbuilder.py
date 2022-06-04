@@ -1,7 +1,7 @@
 """ module for building matcher patterns"""
 import spacy
 from spacy.matcher import Matcher
-from structure import structure
+from structure import Structure
 
 nlp = spacy.load("de_core_news_sm") # load SpaCy pipeline
 
@@ -96,8 +96,9 @@ class KW_Matcher:
 
         return found_words
 
-    def primary_matches(self):
+    def primary_matches(self, struc):
         """checks for occurrence of primary keyword in the items returned by structure
+        :struc: a Structure object, as returned by Structure.structure()
 
         :returns: a dictionary of item names, each with yes/no values 
 
@@ -110,7 +111,7 @@ class KW_Matcher:
         found_pos = dict.fromkeys(labels, "no")
 
         # prepare the items to perform matching on
-        items = list(structure(self.docfile))
+        items = list(struc)
         items[3] = str(items[3].split(". ")[0])      #isolate first sentence of teaser 
             
         for i in items:
@@ -149,8 +150,7 @@ class KW_Matcher:
 
 if __name__ == "__main__":
     kwmatch = KW_Matcher("testdata/testtext2.md", "testdata/req/moneykw.txt")
-    if kwmatch.match_doc() == {'offensiv': [4, 'offensiv'], 'Flasche':
-        [4, 'Flasche'], 'drei': [4, 'drei']}:
+    if kwmatch.match_doc()['offensiv'] == [4, 'offensiv'] and kwmatch.match_doc()['Flasche'] == [4, 'Flasche']:
         print("matcher test successful\n")
     else:
         print("matcher test failed\n")
@@ -162,7 +162,8 @@ if __name__ == "__main__":
         print("submatch test failed\n")
     
     prim_match = KW_Matcher("testdata/testtext.md", "testdata/kw.txt")
-    if prim_match.primary_matches() == {'meta title': 'keyword found', 'meta description': 'no', 'h1': 'keyword found', 'teaser': 'keyword found', 'h2': 'keyword found', 'first paragraph': 'keyword found'}:
+    pstruc = Structure("testdata/testtext.md", "testdata/req/reqs.txt").structure()
+    if prim_match.primary_matches(pstruc) == {'meta title': 'keyword found', 'meta description': 'no', 'h1': 'keyword found', 'teaser': 'keyword found', 'h2': 'keyword found', 'first paragraph': 'keyword found'}:
         print("primary matching test successful\n")
     else:
         print("primary matching test failed\n")
