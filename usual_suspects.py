@@ -1,13 +1,8 @@
-#!/usr/bin/env python
 """ new module to check for forbidden and desired words """
-import sys
-import os
 from matchbuilder import KW_Matcher
 
 #read infile 
-infile = sys.argv[1]
-# keyfile = sys.argv[2]
-# reqfile = str(os.path.dirname(infile) + "/req/reqs.txt")
+# infile = sys.argv[1]
 forbidden = str(os.path.dirname(infile) + "/req/forbidden.txt")
 desired = str(os.path.dirname(infile) + "/req/moneykw.txt")
 
