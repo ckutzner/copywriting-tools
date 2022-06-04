@@ -31,10 +31,9 @@ print("Text ist {0:4d} Worte lang.".format(stats.wordcount(statfile)))
 print("Flesch Index: {0:5.2f}\nWiener Sachtextformel: {1:5.2f}\n".format(rd[0], rd[1]))
 
 print("-"*70)
-print_matches("Anforderungen erfüllt?", struc.structure().items())
-# print(" +++ Anforderungen erfüllt? +++")
-# for k, v in structure.wellformed(infile, reqfile).items():
-#     print("{}:\t{}".format(k, v))
+print(" +++ Anforderungen erfüllt? +++")
+for k, v in struc.wellformed().items():
+    print("{}:\t{}".format(k, v))
 
 print("-"*70)
 print_filtered_matches("Verbotene Worte", fmatch)
@@ -50,7 +49,7 @@ for term, sk in pmatch.subkeys().items():
     print("\"{}\" ist Bestandteil von folgenden Phrasen: \"{}\"".format(term, ", ".join(sk)))
 print("\n")
 
-for term, found in pmatch.primary_matches().items():
+for term, found in pmatch.primary_matches(struc.structure()).items():
     print("{}:\t{}".format(term, found))
 
 print("\n")
