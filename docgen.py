@@ -31,8 +31,7 @@ class MainDoc:
 
         """
         # prepare document
-        with open(self.docfile, encoding = "utf-8") as txt:
-            text = txt.read()
+        text = self.docgen()
         
         # prepare text for processing
         doc = nlp(text)
