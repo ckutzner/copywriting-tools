@@ -16,13 +16,14 @@ reqfile = str(os.path.dirname(infile) + "/req/reqs.txt")
 forbidden = str(os.path.dirname(infile) + "/req/forbidden.txt")
 desired = str(os.path.dirname(infile) + "/req/moneykw.txt")
 
-fmatch = KW_Matcher(infile, forbidden).match_doc()
-dmatch = KW_Matcher(infile, desired).match_doc()
-
 statfile = MainDoc(infile).docgen()
 rd = stats.readability(statfile)
 
 struc = Structure(infile, reqfile)
+
+main_spacy_doc = MainDoc(infile).spacy_doc()
+fmatch = KW_Matcher(main_spacy_doc, forbidden).match_doc()
+dmatch = KW_Matcher(main_spacy_doc, desired).match_doc()
 
 print("="*70)
 print(" +++ Textstatistik +++")
@@ -43,7 +44,7 @@ print_filtered_matches("MoneyKeywords", dmatch)
 print("\n", "-"*70)
 print(" +++ Keywordzählung +++")
 print("-"*70)
-pmatch = KW_Matcher(infile, keyfile)
+pmatch = KW_Matcher(main_spacy_doc, keyfile)
 
 for term, sk in pmatch.subkeys().items():
     print("\"{}\" ist Bestandteil von folgenden Phrasen: \"{}\"".format(term, ", ".join(sk)))

@@ -7,7 +7,7 @@ def print_matches(heading, dict):
     """
     print(" +++ {}: +++ ".format(heading))
     for k, v in dict.items():
-        print("{}:\t{} mal gefunden".format(k, v[0]))
+        print("{}:\t{} mal gefunden in folgenden Ausdrücken: {}".format(k, v[0], ", ".join(v[1:])))
 
 def print_filtered_matches(heading, dict):
     """ Pretty-print matches from a dictionary where the count is not zero.

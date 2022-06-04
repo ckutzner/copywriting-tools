@@ -2,6 +2,7 @@
 import spacy
 from spacy.matcher import Matcher
 from structure import Structure
+from docgen import MainDoc          # just for the test
 
 nlp = spacy.load("de_core_news_sm") # load SpaCy pipeline
 
@@ -12,7 +13,7 @@ class KW_Matcher:
 
     def __init__(self, docfile, keyfile):
         """init 
-        :docfile: document to be checked, a markdown file
+        :docfile: a file object, the main document
         :keyfile: a text file containing phrases to be matched for, one
         key phrase per line
         """
@@ -57,12 +58,7 @@ class KW_Matcher:
         matcher = Matcher(nlp.vocab)        # prepare Matcher
         found_words = {}
         
-        # prepare document
-        with open(self.docfile, encoding = "utf-8") as txt:
-            text = txt.read()
-        
-        # prepare text for processing
-        doc = nlp(text)
+        doc = self.docfile
 
         # match pattern generation for single words
         words = nlp(" ".join(self.single_word))
@@ -149,19 +145,20 @@ class KW_Matcher:
 
 
 if __name__ == "__main__":
-    kwmatch = KW_Matcher("testdata/testtext2.md", "testdata/req/moneykw.txt")
+    file = MainDoc("testdata/testtext2.md").spacy_doc()
+    kwmatch = KW_Matcher(file, "testdata/req/moneykw.txt")
     if kwmatch.match_doc()['offensiv'] == [4, 'offensiv'] and kwmatch.match_doc()['Flasche'] == [4, 'Flasche']:
         print("matcher test successful\n")
     else:
         print("matcher test failed\n")
 
-    submatch = KW_Matcher("testdata/testtext.md", "testdata/kw.txt")
+    submatch = KW_Matcher(file, "testdata/kw.txt")
     if submatch.subkeys() == {'Heiterkeit': ['wunderbare Heiterkeit']}:
         print("submatch test successful\n")
     else:
         print("submatch test failed\n")
     
-    prim_match = KW_Matcher("testdata/testtext.md", "testdata/kw.txt")
+    prim_match = KW_Matcher(file, "testdata/kw.txt")
     pstruc = Structure("testdata/testtext.md", "testdata/req/reqs.txt").structure()
     if prim_match.primary_matches(pstruc) == {'meta title': 'keyword found', 'meta description': 'no', 'h1': 'keyword found', 'teaser': 'keyword found', 'h2': 'keyword found', 'first paragraph': 'keyword found'}:
         print("primary matching test successful\n")
