@@ -6,7 +6,7 @@ import textstat
 import stats
 import structure
 import listcheck
-# import usual_suspects
+from pretty import print_matches, print_filtered_matches
 from docgen import MainDoc
 from matchbuilder import KW_Matcher
 
@@ -16,6 +16,9 @@ keyfile = sys.argv[2]
 reqfile = str(os.path.dirname(infile) + "/req/reqs.txt")
 forbidden = str(os.path.dirname(infile) + "/req/forbidden.txt")
 desired = str(os.path.dirname(infile) + "/req/moneykw.txt")
+
+fmatch = KW_Matcher(infile, forbidden).match_doc()
+dmatch = KW_Matcher(infile, desired).match_doc()
 
 statfile = MainDoc(infile).docgen()
 rd = stats.readability(statfile)
@@ -29,14 +32,10 @@ print(" +++ Anforderungen erfüllt? +++")
 for k, v in structure.wellformed(infile, reqfile).items():
     print("{}:\t{}".format(k, v))
 
-print("\n", "-"*70)
-print(" +++ Verbotene Keywords gefunden: +++")
-for word in listcheck.listcheck(infile, forbidden):
-    print(word)
-
-print("\n +++ MoneyKeywords gefunden: +++")
-for word in listcheck.listcheck(infile, desired):
-    print(word)
+print("-"*70)
+print_filtered_matches("Verbotene Worte", fmatch)
+print("\n")
+print_filtered_matches("MoneyKeywords", dmatch)
 
 print("\n", "-"*70)
 print(" +++ Keywordzählung +++")
@@ -51,8 +50,6 @@ for term, found in pmatch.primary_matches().items():
     print("{}:\t{}".format(term, found))
 
 print("\n")
-
-for kw, match in pmatch.match_doc().items():
-    print("Keyword \"{}\":\t{} mal gefunden in folgenden Ausdrücken: {}".format(kw, match[0], ", ".join(match[1:])))
+print_matches("Keywords gefunden", pmatch.match_doc())
 
 print("="*70)
