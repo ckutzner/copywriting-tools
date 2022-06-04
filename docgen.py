@@ -13,8 +13,19 @@ class MainDoc:
         
         self.docfile = docfile
 
-
     def docgen(self):
+        """generate an object from a text file.
+
+        :returns: a read() object
+
+        """
+        # prepare document
+        with open(self.docfile, encoding = "utf-8") as txt:
+            text = txt.read()
+       
+        return text
+
+    def spacy_doc(self):
         """Generate SpaCy doc.
         :returns: spacy doc
 
@@ -32,3 +43,4 @@ class MainDoc:
 if __name__ == "__main__":
     text = MainDoc("testdata/testtext.md")
     print(text.docgen()[0:10])
+    print(text.spacy_doc()[0:10])
