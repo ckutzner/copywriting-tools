@@ -6,6 +6,8 @@ import textstat
 import stats
 import structure
 import listcheck
+# import usual_suspects
+from docgen import MainDoc
 from matchbuilder import KW_Matcher
 
 #read infile 
@@ -15,11 +17,14 @@ reqfile = str(os.path.dirname(infile) + "/req/reqs.txt")
 forbidden = str(os.path.dirname(infile) + "/req/forbidden.txt")
 desired = str(os.path.dirname(infile) + "/req/moneykw.txt")
 
+statfile = MainDoc(infile).docgen()
+rd = stats.readability(statfile)
+
 print("="*70)
 print(" +++ Textstatistik +++")
 print("-"*70)
-print("Text ist {0:4d} Worte lang.".format(stats.wordcount(infile)))
-print("Flesch Index: {0:5.2f}\nWiener Sachtextformel: {1:5.2f}\n".format(stats.readability(infile)[0], stats.readability(infile)[1]))
+print("Text ist {0:4d} Worte lang.".format(stats.wordcount(statfile)))
+print("Flesch Index: {0:5.2f}\nWiener Sachtextformel: {1:5.2f}\n".format(rd[0], rd[1]))
 print(" +++ Anforderungen erfüllt? +++")
 for k, v in structure.wellformed(infile, reqfile).items():
     print("{}:\t{}".format(k, v))
