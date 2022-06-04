@@ -11,10 +11,20 @@ infile = sys.argv[1]
 forbidden = str(os.path.dirname(infile) + "/req/forbidden.txt")
 desired = str(os.path.dirname(infile) + "/req/moneykw.txt")
 
-print("\n", "-"*70)
-print(" +++ Verbotene Worte gefunden: +++ ")
-fmatch = KW_Matcher(infile, forbidden)
+def print_filtered_matches(heading, dict):
+    """ Pretty-print matches from a dictionary where the count is not zero.
+    :returns: a pretty printout of a dictionary where the first item of the 
+    values list is not zero.
 
-for word, found in fmatch.match_doc().items():
-    if found[0] != 0:
-        print("{}:\t{} mal gefunden".format(word, found[0]))
+    """
+    print("\n", "-"*70)
+    print(" +++ {} gefunden: +++ ".format(heading))
+    for k, v in dict.items():
+        if v[0] != 0:
+            print("{}:\t{} mal gefunden".format(k, v[0]))
+
+fmatch = KW_Matcher(infile, forbidden).match_doc()
+dmatch = KW_Matcher(infile, desired).match_doc()
+
+print_filtered_matches("Verbotene Worte", fmatch)
+print_filtered_matches("MoneyKeywords", dmatch)
