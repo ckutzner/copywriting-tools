@@ -8,7 +8,7 @@ nlp = spacy.load("de_core_news_sm") # load SpaCy pipeline
 class KW_Matcher:
 
     """Builds matching patterns from a text file that contains a list of key phrases, one phrase per line
-    TODO: Make subclass for primary keyword matching """
+    """
 
     def __init__(self, docfile, keyfile):
         """init 
