@@ -73,7 +73,7 @@ class KW_Matcher:
             pattern = []
             wrds = nlp(term)
             for token in wrds[:-1]:
-                pattern.extend([{"LEMMA": token.lemma_}, {"is_stop": True, "op": "?"}])
+                pattern.extend([{"LEMMA": token.lemma_}, {"is_stop": True, "op": "?"}, {"is_punct": True, "op": "?"}])
 
             pattern.extend([{"LEMMA": wrds[-1].lemma_}])
 
